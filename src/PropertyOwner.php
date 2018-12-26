@@ -4,6 +4,8 @@ namespace Biphp\Properties;
 
 trait PropertyOwner
 {
+    use SpecFactory;
+
     protected $propertiesValue = [];
 
     public function get($name)
