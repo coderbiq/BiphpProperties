@@ -12,11 +12,7 @@ class IntegerProperty implements Spec
 
     public function filter($v)
     {
-        try {
-            return is_integer($v) ? intval($v) : $v;
-        } catch (\Exception $e) {
-            return $v;
-        }
+        return is_integer($v) ? intval($v) : $v;
     }
 
     public function validate($v): ?string

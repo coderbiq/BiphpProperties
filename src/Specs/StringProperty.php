@@ -12,11 +12,7 @@ class StringProperty implements Spec
 
     public function filter($v)
     {
-        try {
-            return trim($v);
-        } catch (\Exception $e) {
-            return $v;
-        }
+        return is_string($v) ? trim($v) : $v;
     }
 
     public function validate($v): ?string
