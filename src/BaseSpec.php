@@ -7,6 +7,7 @@ trait BaseSpec
 
     protected $readOnlySpec = false;
     protected $managers     = [];
+    protected $defValue;
 
     public function isReadOnly(): bool
     {
@@ -16,6 +17,17 @@ trait BaseSpec
     public function readOnly(): Spec
     {
         $this->readOnlySpec = true;
+        return $this;
+    }
+
+    public function defaultValue()
+    {
+        return $this->defValue;
+    }
+
+    public function setDefaultValue($v): Spec
+    {
+        $this->defValue = $v;
         return $this;
     }
 

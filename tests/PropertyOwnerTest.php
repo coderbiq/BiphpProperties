@@ -17,7 +17,7 @@ class PropertyOwnerTest extends TestCase
 
     public function testBase()
     {
-        $this->assertEmpty($this->owner->default);
+        $this->assertEquals('defaultValue', $this->owner->default);
 
         $this->owner->default = 'v';
         $this->assertEquals('v', $this->owner->default);
@@ -65,7 +65,7 @@ class MyOwner
     protected function specs(): array
     {
         return [
-            'default'  => $this->spec(),
+            'default'  => $this->spec()->setDefaultValue('defaultValue'),
             'readOnly' => $this->spec()->readOnly()->addManager($this),
         ];
     }

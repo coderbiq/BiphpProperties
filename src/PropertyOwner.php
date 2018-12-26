@@ -8,11 +8,12 @@ trait PropertyOwner
 
     public function get($name)
     {
-        $this->specOrPaninc($name);
+        $spec = $this->specOrPaninc($name);
         if (array_key_exists($name, $this->propertiesValue)) {
             return $this->propertiesValue[$name];
         }
-        return null;
+        $this->propertiesValue[$name] = $spec->defaultValue();
+        return $this->propertiesValue[$name];
     }
 
     public function set($name, $value, $caller = null)
