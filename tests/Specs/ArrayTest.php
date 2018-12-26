@@ -51,7 +51,7 @@ class ArrayTest extends TestCase
      */
     public function testValidateFailure($v)
     {
-        $this->assertEquals('must be of the type array', $this->spec->validate($v));
+        $this->assertEquals('property must be of the type array', $this->spec->validate($v));
     }
 
     public function validateDatas()

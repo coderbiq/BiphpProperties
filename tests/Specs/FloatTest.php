@@ -51,7 +51,7 @@ class FloatTest extends TestCase
      */
     public function testValidateFailure($v)
     {
-        $this->assertEquals('must be of the type float', $this->spec->validate($v));
+        $this->assertEquals('property must be of the type float', $this->spec->validate($v));
     }
 
     public function validateDatas()

@@ -6,6 +6,6 @@ trait TypeSpec
 {
     protected function typeErr(string $type): string
     {
-        return sprintf('must be of the type %s', $type);
+        return sprintf('property must be of the type %s', $type);
     }
 }
