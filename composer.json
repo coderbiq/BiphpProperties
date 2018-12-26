@@ -13,6 +13,11 @@
             "Biphp\\Properties\\" : "src"
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "Testing\\": "tests"
+        }
+    },
     "require-dev": {
         "phpunit/phpunit": "^7.5"
     }

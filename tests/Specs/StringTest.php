@@ -1,11 +1,16 @@
 <?php
 
+namespace Testing\Specs;
+
 use Biphp\Properties\Spec;
 use Biphp\Properties\Specs\StringProperty;
 use PHPUnit\Framework\TestCase;
+use Testing\BaseSpecTestTrait;
 
 class StringTest extends TestCase
 {
+    use BaseSpecTestTrait;
+
     protected $spec;
 
     public function setUp()
@@ -28,7 +33,7 @@ class StringTest extends TestCase
 
     public function filterDatas()
     {
-        $obj = new stdClass;
+        $obj = new \stdClass;
         return [
             ['v', '    v        '],
             [123, 123],
@@ -48,7 +53,7 @@ class StringTest extends TestCase
     {
         return [
             [123],
-            [new stdClass],
+            [new \stdClass],
         ];
     }
 }
