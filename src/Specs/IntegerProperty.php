@@ -15,11 +15,6 @@ class IntegerProperty implements Spec
         $this->addValidator([$this, 'typeValidate']);
     }
 
-    public function filter($v)
-    {
-        return is_integer($v) ? intval($v) : $v;
-    }
-
     public function typeValidate($v): ?string
     {
         if (!is_integer($v)) {

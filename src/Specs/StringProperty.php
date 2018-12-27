@@ -13,9 +13,10 @@ class StringProperty implements Spec
     public function __construct()
     {
         $this->addValidator([$this, 'typeValidate']);
+        $this->addFilter([$this, 'trimFilter']);
     }
 
-    public function filter($v)
+    public function trimFilter($v)
     {
         return is_string($v) ? trim($v) : $v;
     }

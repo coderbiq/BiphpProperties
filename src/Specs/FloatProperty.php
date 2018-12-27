@@ -15,11 +15,6 @@ class FloatProperty implements Spec
         $this->addValidator([$this, 'typeValidate']);
     }
 
-    public function filter($v)
-    {
-        return is_float($v) ? floatval($v) : $v;
-    }
-
     public function typeValidate($v): ?string
     {
         if (!is_float($v)) {

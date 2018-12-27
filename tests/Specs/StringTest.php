@@ -33,11 +33,10 @@ class StringTest extends TestCase
 
     public function filterDatas()
     {
-        $obj = new \stdClass;
         return [
             ['v', '    v        '],
-            [123, 123],
-            [$obj, $obj],
+            ['v2', 'v2      '],
+            ['v3', '     v3'],
         ];
     }
 

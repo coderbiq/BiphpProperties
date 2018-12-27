@@ -15,11 +15,6 @@ class BooleanProperty implements Spec
         $this->addValidator([$this, 'typeValidate']);
     }
 
-    public function filter($v)
-    {
-        return is_bool($v) ? boolval($v) : $v;
-    }
-
     public function typeValidate($v): ?string
     {
         if (!is_bool($v)) {

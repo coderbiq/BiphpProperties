@@ -15,5 +15,7 @@ interface Spec
 
     public function validate($value): ?string;
     public function addValidator(callable $validator): Spec;
+
     public function filter($value);
+    public function addFilter(callable $filter): Spec;
 }

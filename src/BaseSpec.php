@@ -8,6 +8,7 @@ trait BaseSpec
     protected $readOnlySpec = false;
     protected $managers     = [];
     protected $validators   = [];
+    protected $filters      = [];
     protected $defValue;
 
     public function isReadOnly(): bool
@@ -73,6 +74,15 @@ trait BaseSpec
 
     public function filter($value)
     {
+        foreach ($this->filters as $filter) {
+            $value = call_user_func($filter, $value);
+        }
         return $value;
+    }
+
+    public function addFilter(callable $filter): Spec
+    {
+        $this->filters[] = $filter;
+        return $this;
     }
 }

@@ -23,24 +23,6 @@ class ArrayTest extends TestCase
         $this->assertInstanceOf(Spec::class, $this->spec);
     }
 
-    /**
-     * @dataProvider filterDatas
-     */
-    public function testFilter($expected, $v)
-    {
-        $this->assertEquals($expected, $this->spec->filter($v));
-    }
-
-    public function filterDatas()
-    {
-        $obj = new \stdClass;
-        return [
-            [[1], [1]],
-            [false, false],
-            [$obj, $obj],
-        ];
-    }
-
     public function testValidate()
     {
         $this->assertEmpty($this->spec->validate([]));
