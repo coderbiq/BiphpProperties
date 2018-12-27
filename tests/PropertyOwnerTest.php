@@ -51,11 +51,22 @@ class PropertyOwnerTest extends TestCase
         $this->owner->readOnly = 'v2';
         $this->assertEquals('v', $this->owner->readOnly);
     }
+
+    public function testOnChange()
+    {
+        $this->owner->default = 'changeDefault';
+        $this->assertFalse($this->owner->callChangeListener);
+
+        $this->owner->changeCallback = 'called';
+        $this->assertEquals('called', $this->owner->callChangeListener);
+    }
 }
 
 class MyOwner
 {
     use propertyOwner;
+
+    public $callChangeListener = false;
 
     public function changeReadOnly($v)
     {
@@ -65,9 +76,15 @@ class MyOwner
     protected function specs(): array
     {
         return [
-            'default'  => $this->spec()->setDefaultValue('defaultValue'),
-            'readOnly' => $this->spec()->readOnly()->addManager($this),
+            'default'        => $this->spec()->setDefaultValue('defaultValue'),
+            'readOnly'       => $this->spec()->readOnly()->addManager($this),
+            'changeCallback' => $this->spec()->onChange([$this, 'onChangeValue']),
         ];
+    }
+
+    public function onChangeValue($v)
+    {
+        $this->callChangeListener = $v;
     }
 
     protected function spec()

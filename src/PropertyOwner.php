@@ -29,6 +29,9 @@ trait PropertyOwner
             throw new Exception\ValidateFailure($err);
         }
         $this->propertiesValue[$name] = $value;
+        if (($onChange = $spec->changeListener()) && is_callable($onChange)) {
+            call_user_func($onChange, $value);
+        }
     }
 
     public function __get($name)

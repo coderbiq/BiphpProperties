@@ -10,12 +10,12 @@ class IntegerProperty implements Spec
     use BaseSpec;
     use TypeSpec;
 
-    public function filter($v)
+    public function __construct()
     {
-        return is_integer($v) ? intval($v) : $v;
+        $this->addValidator([$this, 'typeValidate']);
     }
 
-    public function validate($v): ?string
+    public function typeValidate($v): ?string
     {
         if (!is_integer($v)) {
             return $this->typeErr('integer');

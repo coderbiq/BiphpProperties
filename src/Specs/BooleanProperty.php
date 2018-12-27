@@ -10,12 +10,12 @@ class BooleanProperty implements Spec
     use BaseSpec;
     use TypeSpec;
 
-    public function filter($v)
+    public function __construct()
     {
-        return is_bool($v) ? boolval($v) : $v;
+        $this->addValidator([$this, 'typeValidate']);
     }
 
-    public function validate($v): ?string
+    public function typeValidate($v): ?string
     {
         if (!is_bool($v)) {
             return $this->typeErr('boolean');

@@ -23,27 +23,9 @@ class IntegerTest extends TestCase
         $this->assertInstanceOf(Spec::class, $this->spec);
     }
 
-    /**
-     * @dataProvider filterDatas
-     */
-    public function testFilter($expected, $v)
-    {
-        $this->assertEquals($expected, $this->spec->filter($v));
-    }
-
-    public function filterDatas()
-    {
-        $obj = new \stdClass;
-        return [
-            [123, '123'],
-            [123, 123],
-            [$obj, $obj],
-        ];
-    }
-
     public function testValidate()
     {
-        $this->assertTrue(true);
+        $this->assertEmpty($this->spec->validate(10));
     }
 
     /**

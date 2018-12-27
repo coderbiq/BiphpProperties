@@ -14,5 +14,11 @@ interface Spec
     public function isManager($caller): bool;
 
     public function validate($value): ?string;
+    public function addValidator(callable $validator): Spec;
+
     public function filter($value);
+    public function addFilter(callable $filter): Spec;
+
+    public function onChange(callable $listener): Spec;
+    public function changeListener(): ?callable ;
 }

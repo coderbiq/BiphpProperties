@@ -10,12 +10,12 @@ class FloatProperty implements Spec
     use BaseSpec;
     use TypeSpec;
 
-    public function filter($v)
+    public function __construct()
     {
-        return is_float($v) ? floatval($v) : $v;
+        $this->addValidator([$this, 'typeValidate']);
     }
 
-    public function validate($v): ?string
+    public function typeValidate($v): ?string
     {
         if (!is_float($v)) {
             return $this->typeErr('float');
