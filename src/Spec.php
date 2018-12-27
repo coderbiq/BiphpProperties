@@ -18,4 +18,7 @@ interface Spec
 
     public function filter($value);
     public function addFilter(callable $filter): Spec;
+
+    public function onChange(callable $listener): Spec;
+    public function changeListener(): ?callable ;
 }

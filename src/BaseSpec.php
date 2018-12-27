@@ -10,6 +10,7 @@ trait BaseSpec
     protected $validators   = [];
     protected $filters      = [];
     protected $defValue;
+    protected $changeListener;
 
     public function isReadOnly(): bool
     {
@@ -84,5 +85,16 @@ trait BaseSpec
     {
         $this->filters[] = $filter;
         return $this;
+    }
+
+    public function onChange(callable $listener): Spec
+    {
+        $this->changeListener = $listener;
+        return $this;
+    }
+
+    public function changeListener(): ?callable
+    {
+        return $this->changeListener;
     }
 }

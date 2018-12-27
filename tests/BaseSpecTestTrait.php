@@ -35,6 +35,15 @@ trait BaseSpecTestTrait
         $this->assertEquals($v, $this->spec->filter($v));
     }
 
+    public function testOnChange()
+    {
+        $this->assertEmpty($this->spec->changeListener());
+
+        $callback = function () {};
+        $this->spec->onChange($callback);
+        $this->assertEquals($callback, $this->spec->changeListener());
+    }
+
     public function customerValidate($v): ?string
     {
         if ($v == 'badValue') {
@@ -42,5 +51,4 @@ trait BaseSpecTestTrait
         }
         return null;
     }
-
 }
