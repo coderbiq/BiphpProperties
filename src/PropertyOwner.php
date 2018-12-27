@@ -8,7 +8,7 @@ trait PropertyOwner
 
     protected $propertiesValue = [];
 
-    public function get($name)
+    protected function get($name)
     {
         $spec = $this->specOrPaninc($name);
         if (array_key_exists($name, $this->propertiesValue)) {
@@ -18,7 +18,7 @@ trait PropertyOwner
         return $this->propertiesValue[$name];
     }
 
-    public function set($name, $value, $caller = null)
+    protected function set($name, $value, $caller = null)
     {
         $spec  = $this->specOrPaninc($name);
         $value = $spec->filter($value);
