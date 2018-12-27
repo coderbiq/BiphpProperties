@@ -11,18 +11,18 @@ class ObjectProperty implements Spec
 
     protected $valueClassName;
 
+    public function __construct()
+    {
+        $this->addValidator([$this, 'typeValidate']);
+    }
+
     public function setInstanceOf(string $className): ObjectProperty
     {
         $this->valueClassName = $className;
         return $this;
     }
 
-    public function filter($v)
-    {
-        return $v;
-    }
-
-    public function validate($v): ?string
+    public function typeValidate($v): ?string
     {
         if (!is_object($v) || (
             $this->valueClassName != null

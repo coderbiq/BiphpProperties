@@ -43,7 +43,7 @@ class IntegerTest extends TestCase
 
     public function testValidate()
     {
-        $this->assertTrue(true);
+        $this->assertEmpty($this->spec->validate(10));
     }
 
     /**

@@ -43,7 +43,7 @@ class ArrayTest extends TestCase
 
     public function testValidate()
     {
-        $this->assertTrue(true);
+        $this->assertEmpty($this->spec->validate([]));
     }
 
     /**

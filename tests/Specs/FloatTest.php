@@ -43,7 +43,7 @@ class FloatTest extends TestCase
 
     public function testValidate()
     {
-        $this->assertTrue(true);
+        $this->assertEmpty($this->spec->validate(1.1));
     }
 
     /**

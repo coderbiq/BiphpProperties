@@ -7,6 +7,7 @@ trait BaseSpec
 
     protected $readOnlySpec = false;
     protected $managers     = [];
+    protected $validators   = [];
     protected $defValue;
 
     public function isReadOnly(): bool
@@ -56,7 +57,18 @@ trait BaseSpec
 
     public function validate($value): ?string
     {
+        foreach ($this->validators as $validator) {
+            if (($err = call_user_func($validator, $value)) && $err !== null) {
+                return $err;
+            }
+        }
         return null;
+    }
+
+    public function addValidator(callable $validator): Spec
+    {
+        $this->validators[] = $validator;
+        return $this;
     }
 
     public function filter($value)

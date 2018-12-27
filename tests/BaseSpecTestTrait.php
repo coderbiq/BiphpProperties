@@ -23,12 +23,24 @@ trait BaseSpecTestTrait
     public function testValidate()
     {
         $this->assertNull($this->spec->validate(''));
+
+        $this->spec->addValidator([$this, 'customerValidate']);
+        $this->assertNull($this->spec->validate('good value'));
+        $this->assertEquals('validate failure', $this->spec->validate('badValue'));
     }
 
     public function testFilter()
     {
         $v = 'test value';
         $this->assertEquals($v, $this->spec->filter($v));
+    }
+
+    public function customerValidate($v): ?string
+    {
+        if ($v == 'badValue') {
+            return 'validate failure';
+        }
+        return null;
     }
 
 }
