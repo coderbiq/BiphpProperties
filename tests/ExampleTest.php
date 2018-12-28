@@ -2,22 +2,54 @@
 
 use Biphp\Properties\Exception as Errors;
 use Example\User;
+use Example\UserRepo;
 
 class ExampleTest extends \PHPUnit\Framework\TestCase
 {
-    protected $user;
-
-    public function setUp()
+    public function testBaseChange()
     {
-        $this->user = new User();
+        $user = new User();
+        $this->assertEmpty($user->name);
+        $user->name = 'test name';
+        $this->assertEquals('test name', $user->name);
     }
 
-    public function testChangeId()
+    public function testObjectType()
     {
-        $this->user->save();
-        $this->assertEquals(1, $this->user->id);
+        $user = new User();
 
+        $inviter       = new User();
+        $user->inviter = $inviter;
+        $this->assertEquals($inviter, $user->inviter);
+
+        $this->expectException(Errors\ValidateFailure::class);
+        $user->inviter = $this;
+    }
+
+    public function testChangeReadOnlyInOwnerInstance()
+    {
+        $user = new User();
+        $user->save(1);
+        $this->assertEquals(1, $user->id);
+    }
+
+    public function testChangeReadOnlyInOwner()
+    {
+        $u = User::create(2);
+        $this->assertEquals(2, $u->id);
+    }
+
+    public function testChangeReadOnlyInManager()
+    {
+        $repo = new UserRepo();
+        $u    = $repo->findOne(3);
+        $this->assertEquals(3, $u->id);
+    }
+
+    public function testChangeReadOnlyException()
+    {
+        $user = new User();
         $this->expectException(Errors\ChangeReadOnly::class);
-        $this->user->id = 2;
+        $user->id = 2;
     }
 }

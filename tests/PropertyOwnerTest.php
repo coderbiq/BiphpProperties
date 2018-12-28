@@ -70,14 +70,14 @@ class MyOwner
 
     public function changeReadOnly($v)
     {
-        $this->set('readOnly', $v, $this);
+        $this->innerSet('readOnly', $v);
     }
 
     protected function specs(): array
     {
         return [
             'default'        => $this->spec()->setDefaultValue('defaultValue'),
-            'readOnly'       => $this->spec()->readOnly()->addManager($this),
+            'readOnly'       => $this->spec()->readOnly(),
             'changeCallback' => $this->spec()->onChange([$this, 'onChangeValue']),
         ];
     }

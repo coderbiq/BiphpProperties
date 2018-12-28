@@ -8,6 +8,22 @@ trait PropertyOwner
 
     protected $propertiesValue = [];
 
+    public function setter($caller): callable
+    {
+        if (!$this->isManager($caller)) {
+            return null;
+        }
+        $me = $this;
+        return function (string $name, $value) use ($me) {
+            $me->innerSet($name, $value);
+        };
+    }
+
+    protected function specs(): array
+    {
+        return [];
+    }
+
     protected function get($name)
     {
         $spec = $this->specOrPaninc($name);
@@ -18,13 +34,19 @@ trait PropertyOwner
         return $this->propertiesValue[$name];
     }
 
-    protected function set($name, $value, $caller = null)
+    protected function set($name, $value)
+    {
+        $spec = $this->specOrPaninc($name);
+        if ($spec->isReadOnly()) {
+            throw new Exception\ChangeReadOnly();
+        }
+        $this->innerSet($name, $value);
+    }
+
+    protected function innerSet($name, $value)
     {
         $spec  = $this->specOrPaninc($name);
         $value = $spec->filter($value);
-        if ($spec->isReadOnly() && !$spec->isManager($caller)) {
-            throw new Exception\ChangeReadOnly();
-        }
         if (($err = $spec->validate($value)) && $err !== null) {
             throw new Exception\ValidateFailure($err);
         }
@@ -32,6 +54,26 @@ trait PropertyOwner
         if (($onChange = $spec->changeListener()) && is_callable($onChange)) {
             call_user_func($onChange, $value);
         }
+    }
+
+    protected function isManager($caller): bool
+    {
+        if (!is_object($caller)) {
+            return false;
+        }
+        foreach ($this->propertyManagers() as $manager) {
+            if ($caller instanceof $manager) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    protected function propertyManagers(): array
+    {
+        return [
+            __CLASS__,
+        ];
     }
 
     public function __get($name)
@@ -42,11 +84,6 @@ trait PropertyOwner
     public function __set($name, $value)
     {
         $this->set($name, $value);
-    }
-
-    protected function specs(): array
-    {
-        return [];
     }
 
     protected function specOrPaninc($name)
