@@ -12,14 +12,6 @@ trait BaseSpecTestTrait
         $this->assertTrue($this->spec->isReadOnly());
     }
 
-    public function testManager()
-    {
-        $this->assertFalse($this->spec->isManager($this));
-
-        $this->spec->addManager($this);
-        $this->assertTrue($this->spec->isManager($this));
-    }
-
     public function testValidate()
     {
         $this->assertNull($this->spec->validate(''));

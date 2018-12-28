@@ -1,6 +1,7 @@
 {
     "name": "biqiang/biphp-properties",
-    "description": "php types",
+    "description": "为 PHP 提供属性管理扩展。",
+    "license": "GPL-3.0-only",
     "authors": [
         {
             "name": "bi qiang",

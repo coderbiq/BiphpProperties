@@ -2,13 +2,69 @@
 
 namespace Biphp\Properties;
 
+/**
+ * 定义属性拥有者特性
+ *
+ * 属性拥有者应该在内部重写 `specs` 方法声明自己的属性定义
+ *
+ * ```php
+ * class MyClass {
+ *
+ *  protected function specs(): array {
+ *      return [
+ *          'propertyName': PropertySepcObj,
+ *      ];
+ *  }
+ * }
+ *
+ * $obj = new MyClass();
+ * echo $obj->propertyName;
+ * ```
+ *
+ * 如果希望其它类也可以修改只读属性，可以通过重写 `propertyManagers` 方法声明属性管理者列表
+ *
+ * ```php
+ * class MyClass {
+ *  protected function propertyManagers(): array {
+ *      return [
+ *          __CLASS__,
+ *          Manager::class,
+ *      ];
+ *  }
+ * }
+ *
+ * class Manager{
+ *      public function chnageReadOnly() {
+ *          $obj = new MyClass();
+ *          $setter = $obj->setter($this);
+ *          $setter('readOnlyPropertyName', $newValue);
+ *      }
+ * }
+ * ```
+ */
 trait PropertyOwner
 {
     use SpecFactory;
 
     protected $propertiesValue = [];
 
-    public function get($name)
+    public function setter($caller): callable
+    {
+        if (!$this->isManager($caller)) {
+            return null;
+        }
+        $me = $this;
+        return function (string $name, $value) use ($me) {
+            $me->innerSet($name, $value);
+        };
+    }
+
+    protected function specs(): array
+    {
+        return [];
+    }
+
+    protected function get($name)
     {
         $spec = $this->specOrPaninc($name);
         if (array_key_exists($name, $this->propertiesValue)) {
@@ -18,13 +74,19 @@ trait PropertyOwner
         return $this->propertiesValue[$name];
     }
 
-    public function set($name, $value, $caller = null)
+    protected function set($name, $value)
+    {
+        $spec = $this->specOrPaninc($name);
+        if ($spec->isReadOnly()) {
+            throw new Exception\ChangeReadOnly();
+        }
+        $this->innerSet($name, $value);
+    }
+
+    protected function innerSet($name, $value)
     {
         $spec  = $this->specOrPaninc($name);
         $value = $spec->filter($value);
-        if ($spec->isReadOnly() && !$spec->isManager($caller)) {
-            throw new Exception\ChangeReadOnly();
-        }
         if (($err = $spec->validate($value)) && $err !== null) {
             throw new Exception\ValidateFailure($err);
         }
@@ -32,6 +94,26 @@ trait PropertyOwner
         if (($onChange = $spec->changeListener()) && is_callable($onChange)) {
             call_user_func($onChange, $value);
         }
+    }
+
+    protected function isManager($caller): bool
+    {
+        if (!is_object($caller)) {
+            return false;
+        }
+        foreach ($this->propertyManagers() as $manager) {
+            if ($caller instanceof $manager) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    protected function propertyManagers(): array
+    {
+        return [
+            __CLASS__,
+        ];
     }
 
     public function __get($name)
@@ -42,11 +124,6 @@ trait PropertyOwner
     public function __set($name, $value)
     {
         $this->set($name, $value);
-    }
-
-    protected function specs(): array
-    {
-        return [];
     }
 
     protected function specOrPaninc($name)
