@@ -2,6 +2,46 @@
 
 namespace Biphp\Properties;
 
+/**
+ * 定义属性拥有者特性
+ *
+ * 属性拥有者应该在内部重写 `specs` 方法声明自己的属性定义
+ *
+ * ```php
+ * class MyClass {
+ *
+ *  protected function specs(): array {
+ *      return [
+ *          'propertyName': PropertySepcObj,
+ *      ];
+ *  }
+ * }
+ *
+ * $obj = new MyClass();
+ * echo $obj->propertyName;
+ * ```
+ *
+ * 如果希望其它类也可以修改只读属性，可以通过重写 `propertyManagers` 方法声明属性管理者列表
+ *
+ * ```php
+ * class MyClass {
+ *  protected function propertyManagers(): array {
+ *      return [
+ *          __CLASS__,
+ *          Manager::class,
+ *      ];
+ *  }
+ * }
+ *
+ * class Manager{
+ *      public function chnageReadOnly() {
+ *          $obj = new MyClass();
+ *          $setter = $obj->setter($this);
+ *          $setter('readOnlyPropertyName', $newValue);
+ *      }
+ * }
+ * ```
+ */
 trait PropertyOwner
 {
     use SpecFactory;
